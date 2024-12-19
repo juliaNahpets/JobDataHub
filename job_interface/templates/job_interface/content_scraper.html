@@ -1,0 +1,21 @@
+{% extends "job_interface/base.html" %}
+
+{% block content %}
+    <div class="bg-body-tertiary p-5 rounded">
+        <h1>Content Scraper</h1>
+        <form action="{% url 'content_scraper' %}" method="post">
+            {% csrf_token %}
+            <div class="url_container mt-4 mb-5">
+                <div class="form-floating mb-3">
+                    {{ form.url }}
+                    <label for="url">Enter your content url...</label>
+                </div>
+                <div class="form-floating">
+                    {{ form.content }}
+                    <label for="floatingTextarea2">Enter your content for scraping...</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-bd-primary">Start scraping</button>
+        </form>
+    </div>
+{% endblock content %}

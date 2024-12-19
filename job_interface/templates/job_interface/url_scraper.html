@@ -1,0 +1,64 @@
+{% extends "job_interface/base.html" %}
+
+{% block content %}
+    <div class="bg-body-tertiary p-5 rounded">
+        <h1>Url Scraper</h1>
+        <form id="url_array" action="{% url 'url_scraper' %}" method="post">
+            {% csrf_token %}
+            <div class="url_container mt-4 mb-3">
+                <div class="form-floating">
+                    <input type="url" class="form-control" name="url_0" id="url_0" placeholder="webScraping_url">
+                    <label for="url_0">Enter your url for scraping...</label>
+                </div>
+            </div>
+            <div id="dynamic_url_container" class="d-flex flex-column row-gap-3 mt-3 mb-5 hidden">
+            </div>
+            {{ form.url_list }}
+            <div class="d-flex flex-column row-gap-3">
+                <button id="addURLField" type="button" class="btn btn-bd-primary align-self-end" style="margin-top: -2em">Add Url</button>
+                <button type="submit" class="btn btn-bd-primary align-self-center">Start scraping</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
+
+{% block script_content %}
+    <script>
+        let urlCounter = 1
+
+        document.getElementById("addURLField").addEventListener("click", () => {
+            const dynamicContainer = document.getElementById("dynamic_url_container");
+            removeHidden(dynamicContainer);
+            addURLField(dynamicContainer);
+            
+        })
+
+        function removeHidden(container){
+            if (container.classList.contains("hidden")){
+                    container.classList.remove("hidden")
+                }
+        }
+
+        function addURLField(container){
+            urlContainer = document.createElement("div");
+            urlContainer.classList.add("form-floating");
+            urlContainer.innerHTML = `
+                <input type="url" class="form-control" name="url_${urlCounter}" id="url_${urlCounter}" placeholder="webScraping_url" required>
+                <label for="url_${urlCounter}">Enter your url for scraping...</label>
+            `;
+            container.appendChild(urlContainer);
+            urlCounter++;
+        }
+    
+        document.getElementById("url_array").addEventListener("submit", (event) => {
+            event.preventDefault();
+            const urlContainer = event.target.querySelectorAll("input[type='url']");
+            const urlArray = [...urlContainer].map(item => item.value).filter(url => url.trim() !== "");
+
+            const hiddenInput = document.getElementById("url_list");
+            hiddenInput.value = JSON.stringify(urlArray);
+            
+            event.target.submit();
+        });
+    </script>
+{% endblock script_content %}
