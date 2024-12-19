@@ -1,3 +1,4 @@
 Django==5.1.4
+django-cors-headers==4.6.0
 webScraping @ git+https://github.com/juliaNahpets/JobScraperPackage.git
 
